@@ -21,14 +21,6 @@ resource "aws_instance" "public-instance" {
       "sudo systemctl start jenkins",
       ]
    }
- connection {
-    type         = "ssh"
-    host         = self.public_ip
-    user         = "ec2-user"
-     }
-  tags  = {
-    "Project"      = "Jenkins"
-      }
  }
 }
 
