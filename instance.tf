@@ -9,7 +9,27 @@ resource "aws_instance" "public-instance" {
     Name    = "public-instance"
     PROJECT = "JIEM"
   }
-
+ 
+ provisioner "remote-exec"  {
+    inline  = [
+      "sudo yum install -y jenkins java-11-openjdk-devel",
+      "sudo yum -y install wget",
+      "sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo",
+      "sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key",
+      "sudo yum upgrade -y",
+      "sudo yum install jenkins -y",
+      "sudo systemctl start jenkins",
+      ]
+   }
+ connection {
+    type         = "ssh"
+    host         = self.public_ip
+    user         = "ec2-user"
+     }
+  tags  = {
+    "Project"      = "Jenkins"
+      }
+ }
 }
 
 resource "aws_instance" "private-instance" {
